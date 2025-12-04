@@ -5,7 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+
+class Result{
+    int [][] matrix;
+    int counter;
+
+    public  Result(int [][] matrix, int counter){
+        this.matrix = matrix;
+        this.counter = counter;
+    }
+}
+
 public class MatrixReader {
+
+
 
     private enum CellType {
         CORNER, EDGE, MIDDLE
@@ -24,7 +37,7 @@ public class MatrixReader {
         return matrix;
     }
 
-    public static  int[][] rollsBlocked(int[][] matrix){
+    public static  Result rollsBlocked(int[][] matrix){
 
         int columnSize = matrix[0].length;
         int rowSize = matrix.length;
@@ -66,8 +79,8 @@ public class MatrixReader {
 
             }
         }
-        System.out.println("Total: " + counter);
-        return result;
+//        System.out.println("Total: " + counter);
+        return new Result(result, counter);
 
 
 
@@ -165,6 +178,16 @@ public class MatrixReader {
         }
     }
 
+    private static int [][] cleanMatrix(int [][] matrix, int[][] result){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if(result[i][j] == 2){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        return matrix;
+    }
 
     public static void main(String args[])  throws IOException {
 
@@ -172,8 +195,19 @@ public class MatrixReader {
         int[][] matrix = readMatrix(args[0]);
 
 //        printMatrix(matrix);
+        Result r;
+        int total = 0;
+        do {
+            r = rollsBlocked(matrix);
+            cleanMatrix(matrix, r.matrix);
+            total += r.counter;
+            System.out.println("Found:" + r.counter);
+        } while(r.counter > 0);
 
-        int [] [] result = rollsBlocked(matrix);
+        System.out.println("Total: " + total);
+
+
+
 
 //        printMatrix(result);
 
