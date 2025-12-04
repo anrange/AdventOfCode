@@ -1,4 +1,4 @@
-package co.rangel;
+package co.rangel.day1;
 
 import java.io.IOException;
 import java.nio.file.Files;
